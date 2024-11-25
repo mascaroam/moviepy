@@ -99,6 +99,7 @@ class VideoFileClip(VideoClip):
         fps_source="fps",
         pixel_format=None,
         is_mask=False,
+        error_if_missing_audio_frames: bool = False,
     ):
         VideoClip.__init__(self, is_mask=is_mask)
 
@@ -145,6 +146,7 @@ class VideoFileClip(VideoClip):
                 buffersize=audio_buffersize,
                 fps=audio_fps,
                 nbytes=audio_nbytes,
+                error_if_missing_frames=error_if_missing_audio_frames,
             )
 
     def __deepcopy__(self, memo):

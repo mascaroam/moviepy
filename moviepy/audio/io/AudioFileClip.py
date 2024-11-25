@@ -57,7 +57,13 @@ class AudioFileClip(AudioClip):
 
     @convert_path_to_string("filename")
     def __init__(
-        self, filename, decode_file=False, buffersize=200000, nbytes=2, fps=44100
+        self,
+        filename,
+        decode_file=False,
+        buffersize=200000,
+        nbytes=2,
+        fps=44100,
+        error_if_missing_frames: bool = False,
     ):
         AudioClip.__init__(self)
 
@@ -68,6 +74,7 @@ class AudioFileClip(AudioClip):
             fps=fps,
             nbytes=nbytes,
             buffersize=buffersize,
+            error_if_missing_frames=error_if_missing_frames,
         )
         self.fps = fps
         self.duration = self.reader.duration

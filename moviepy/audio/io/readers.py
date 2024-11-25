@@ -47,6 +47,7 @@ class FFMPEG_AudioReader:
         fps=44100,
         nbytes=2,
         nchannels=2,
+        error_if_missing_frames: bool = False,
     ):
         # TODO bring FFMPEG_AudioReader more in line with FFMPEG_VideoReader
         # E.g. here self.pos is still 1-indexed.
@@ -57,6 +58,7 @@ class FFMPEG_AudioReader:
         self.format = "s%dle" % (8 * nbytes)
         self.codec = "pcm_s%dle" % (8 * nbytes)
         self.nchannels = nchannels
+        self.error_if_missing_frames = error_if_missing_frames
         infos = ffmpeg_parse_infos(filename, decode_file=decode_file)
         self.duration = infos["duration"]
         self.bitrate = infos["audio_bitrate"]
@@ -238,6 +240,9 @@ class FFMPEG_AudioReader:
                     + str(error),
                     UserWarning,
                 )
+
+                if self.error_if_missing_frames:
+                    raise error
 
                 # repeat the last frame instead
                 indices[indices >= len(self.buffer)] = len(self.buffer) - 1
